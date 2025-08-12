@@ -1,181 +1,216 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RKV 2025 – Chat</title>
-  <style>
-    *{box-sizing:border-box}html,body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-    /* Flydende launcher */
-    .launcher{position:fixed;right:16px;bottom:16px;width:56px;height:56px;border-radius:999px;border:0;background:#e30613;color:#fff;
-      box-shadow:0 6px 20px rgba(0,0,0,.2);font-size:22px;cursor:pointer}
-    .panel{position:fixed;right:16px;bottom:84px;width:360px;max-width:95vw;height:70vh;max-height:80vh;background:#fff;border:1px solid #e5e7eb;
-      border-radius:16px;box-shadow:0 12px 30px rgba(0,0,0,.2);display:none;flex-direction:column;overflow:hidden}
-    .panel.open{display:flex}
-    .topbar{background:#e30613;color:#fff;padding:10px 12px;display:flex;align-items:center;gap:8px}
-    .brand{font-weight:800}
-    .hero{padding:10px 12px;border-bottom:1px solid #f1f5f9}
-    .hero .logo{width:36px;height:36px;border-radius:999px;background:#ffe066;display:inline-grid;place-items:center;margin-right:6px}
-    .suggest{display:grid;grid-template-columns:1fr;gap:8px;margin-top:8px}
-    .suggest button{border:1px solid #e5e7eb;background:#fff;border-radius:12px;padding:8px 10px;text-align:left;cursor:pointer}
-    .chat{flex:1;overflow:auto;padding:10px 12px;background:#fff}
-    .msg{display:flex;gap:8px;margin:6px 0}
-    .msg.user{justify-content:flex-end}
-    .msg .bubble{max-width:80%;padding:10px;border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
-    .msg.user .bubble{background:#0f172a;color:#fff}
-    .msg.assistant .bubble{background:#f8fafc;border:1px solid #e5e7eb}
-    .sources{margin-top:6px;padding-top:6px;border-top:1px solid #e2e8f0}
-    .sources-title{font-size:10px;letter-spacing:.04em;color:#64748b;text-transform:uppercase;margin-bottom:4px}
-    .composer{border-top:1px solid #e5e7eb;padding:8px;background:#fff}
-    .composer .row{display:flex;gap:8px}
-    .composer textarea{flex:1;border:1px solid #e5e7eb;border-radius:999px;padding:10px 12px;resize:none;height:42px}
-    .composer button{width:56px;border-radius:999px;border:0;background:#0f172a;color:#fff;font-size:18px;cursor:pointer}
-    .foot{font-size:11px;color:#64748b;text-align:center;margin-top:6px}
-    .config{position:fixed;left:16px;bottom:16px;background:#0f172a;color:#fff;font-size:12px;padding:6px 10px;border-radius:999px;opacity:.9}
-    .config input{width:260px;border:0;border-radius:8px;padding:6px 8px;margin-left:6px}
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testside for OpenAI Assistent (OpenWidget)</title>
 </head>
 <body>
-  <!-- Flydende knap -->
-  <button class="launcher" id="launcher" title="Åbn chat">💬</button>
+    <h1>Velkommen til min testside</h1>
+    <p>Her kan jeg teste min OpenAI assistent via OpenWidget integration.</p>
 
-  <!-- Chatpanel -->
-  <div class="panel" id="panel">
-    <div class="topbar"><span class="brand">RKV</span><span>Hej-chat</span>
-      <button id="close" title="Luk" style="margin-left:auto;background:transparent;border:0;color:#fff;font-size:18px;cursor:pointer">✕</button>
-    </div>
+ <!-- Start of OpenWidget (www.openwidget.com) code -->
+<script>
+  window.__ow = window.__ow || {};
+  window.__ow.organizationId = "aba66665-a022-4f1a-8d71-cbfffee1cced";
+  window.__ow.integration_name = "manual_settings";
+  window.__ow.product_name = "openwidget";   
+  ;(function(n,t,c){function i(n){return e._h?e._h.apply(null,n):e._q.push(n)}var e={_q:[],_h:null,_v:"2.0",on:function(){i(["on",c.call(arguments)])},once:function(){i(["once",c.call(arguments)])},off:function(){i(["off",c.call(arguments)])},get:function(){if(!e._h)throw new Error("[OpenWidget] You can't use getters before load.");return i(["get",c.call(arguments)])},call:function(){i(["call",c.call(arguments)])},init:function(){var n=t.createElement("script");n.async=!0,n.type="text/javascript",n.src="https://cdn.openwidget.com/openwidget.js",t.head.appendChild(n)}};!n.__ow.asyncInit&&e.init(),n.OpenWidget=n.OpenWidget||e}(window,document,[].slice))
+</script>
+<noscript>You need to <a href="https://www.openwidget.com/enable-javascript" rel="noopener nofollow">enable JavaScript</a> to use the communication tool powered by <a href="https://www.openwidget.com/" rel="noopener nofollow" target="_blank">OpenWidget</a></noscript>
+<!-- End of OpenWidget code -->
 
-    <div class="hero">
-      <div><span class="logo">🙂</span><strong>Hej RKV 2025</strong></div>
-      <div style="color:#475569;font-size:14px;margin-top:4px">Stil spørgsmål om RKV’s journalistik. Svarene kan komme fra din backend eller demo-mode.</div>
-      <div class="suggest" id="suggest"></div>
-    </div>
-
-    <div class="chat" id="chat"></div>
-
-    <div class="composer">
-      <div class="row">
-        <textarea id="input" placeholder="Skriv dit spørgsmål her"></textarea>
-        <button id="send" title="Send">➤</button>
-      </div>
-      <div class="foot">Tip: tryk Enter for at sende</div>
-    </div>
-  </div>
-
-  <!-- Lille config til API-URL -->
-  <div class="config">API:
-    <input id="apiUrl" placeholder="https://din-backend.dk/api/ask" />
-  </div>
-
-  <script>
-    // ----- UI elementer -----
-    const panel = document.getElementById('panel');
-    const launcher = document.getElementById('launcher');
-    const closeBtn = document.getElementById('close');
-    const chatEl = document.getElementById('chat');
-    const inputEl = document.getElementById('input');
-    const sendBtn = document.getElementById('send');
-    const suggestEl = document.getElementById('suggest');
-    const apiUrlEl = document.getElementById('apiUrl');
-
-    // ----- Launcher -----
-    launcher.onclick = () => panel.classList.add('open');
-    closeBtn.onclick = () => panel.classList.remove('open');
-
-    // ----- Demo-forslag -----
-    const DEFAULT_SUGGESTED = [
-      { t: "Hvordan stemmer jeg til valget?", e: "🗳️" },
-      { t: "Hvad er status på kommunens budget?", e: "🏛️" },
-      { t: "Hvad betyder ændringerne i dagpengene?", e: "💬" }
-    ];
-    DEFAULT_SUGGESTED.forEach(s => {
-      const b = document.createElement('button');
-      b.innerHTML = `<span style="margin-right:6px">${s.e}</span>${s.t}`;
-      b.onclick = () => ask(s.t);
-      suggestEl.appendChild(b);
-    });
-
-    // ----- Session-id til evt. logging i backend -----
-    const SESSION_KEY = "rkv_session_id";
-    let SESSION_ID = localStorage.getItem(SESSION_KEY);
-    if (!SESSION_ID) { SESSION_ID = crypto.randomUUID(); localStorage.setItem(SESSION_KEY, SESSION_ID); }
-
-    // ----- API URL (gemmes i localStorage) -----
-    let API_URL = localStorage.getItem('rkv_api_url') || "";
-    apiUrlEl.value = API_URL;
-    apiUrlEl.onchange = () => {
-      API_URL = apiUrlEl.value.trim();
-      if (API_URL) localStorage.setItem('rkv_api_url', API_URL);
-      else localStorage.removeItem('rkv_api_url');
-    };
-
-    // ----- Hjælpere -----
-    function sanitize(q){ return (q||"").replace(/\s+/g," ").trim(); }
-    function addMessage(role, text, sources){
-      const wrap = document.createElement('div');
-      wrap.className = 'msg ' + (role === 'user' ? 'user' : 'assistant');
-      const bubble = document.createElement('div');
-      bubble.className = 'bubble';
-      bubble.textContent = text;
-      wrap.appendChild(bubble);
-
-      if (sources?.length){
-        const sct = document.createElement('div'); sct.className='sources';
-        const ttl = document.createElement('div'); ttl.className='sources-title'; ttl.textContent='Kilder';
-        sct.appendChild(ttl);
-        const ul = document.createElement('ul');
-        sources.forEach(s=>{
-          const li=document.createElement('li');
-          li.innerHTML = `<div style="font-weight:600;font-size:12px">${s.title||"Kilde"}</div>
-                          ${s.snippet?`<div style="color:#64748b;font-size:12px">${s.snippet}</div>`:''}
-                          ${s.url?`<a style="font-size:12px" target="_blank" rel="noreferrer" href="${s.url}">${s.url}</a>`:''}`;
-          ul.appendChild(li);
-        });
-        sct.appendChild(ul);
-        bubble.appendChild(sct);
-      }
-
-      chatEl.appendChild(wrap);
-      chatEl.scrollTop = chatEl.scrollHeight;
-    }
-
-    async function ask(q){
-      const query = sanitize(q || inputEl.value);
-      if (!query) return;
-      addMessage('user', query);
-      inputEl.value = '';
-
-      try{
-        if (!API_URL){
-          // Demo-mode
-          await new Promise(r=>setTimeout(r,400));
-          addMessage('assistant', `(Demo) Du spurgte: "${query}". Sæt din API-URL nederst til venstre for rigtige svar.`, [
-            { title:"Demo-kilde", url:"https://example.com", snippet:"Dette er en demo." }
-          ]);
-          return;
-        }
-
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type':'application/json', 'X-Client-Session': SESSION_ID },
-          body: JSON.stringify({ query, topK: 5, model: 'gpt-4o' })
-        });
-        if (!res.ok) throw new Error('API-fejl: ' + res.status);
-        const data = await res.json();
-        addMessage('assistant', data.answer || '(Tomt svar)', data.sources || []);
-      }catch(e){
-        addMessage('assistant', 'Der skete en fejl: ' + (e?.message||e));
-      }
-    }
-
-    // ----- Sendhåndtering -----
-    sendBtn.onclick = ()=>ask();
-    inputEl.addEventListener('keydown', (e)=>{
-      if (e.key === 'Enter' && !e.shiftKey){
-        e.preventDefault();
-        ask();
-      }
-    });
-  </script>
 </body>
 </html>
+
+
+
+
+<!-- === BEHOLD DIN OPENWIDGET-SNIPPET HER OVENFOR === -->
+
+<style>
+  /* Skjul OpenWidgets launcher (forsøg 1: typiske class/id-navne) */
+  .openwidget-widget-launcher,
+  #openwidget-launcher,
+  [data-openwidget-launcher] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+
+  /* Din egen Hej-launcher + panel (samme look som før) */
+  .rkv-launcher{position:fixed;right:16px;bottom:16px;width:56px;height:56px;border-radius:999px;border:0;background:#e30613;color:#fff;
+    box-shadow:0 6px 20px rgba(0,0,0,.2);font-size:22px;cursor:pointer;z-index:2147483000}
+  .rkv-panel{position:fixed;right:16px;bottom:84px;width:360px;max-width:95vw;height:70vh;max-height:80vh;background:#fff;border:1px solid #e5e7eb;
+    border-radius:16px;box-shadow:0 12px 30px rgba(0,0,0,.2);display:none;flex-direction:column;overflow:hidden;z-index:2147483000}
+  .rkv-panel.open{display:flex}
+  .rkv-topbar{background:#e30613;color:#fff;padding:10px 12px;display:flex;align-items:center;gap:8px}
+  .rkv-brand{font-weight:800}
+  .rkv-hero{padding:10px 12px;border-bottom:1px solid #f1f5f9}
+  .rkv-hero .logo{width:36px;height:36px;border-radius:999px;background:#ffe066;display:inline-grid;place-items:center;margin-right:6px}
+  .rkv-suggest{display:grid;grid-template-columns:1fr;gap:8px;margin-top:8px}
+  .rkv-suggest button{border:1px solid #e5e7eb;background:#fff;border-radius:12px;padding:8px 10px;text-align:left;cursor:pointer}
+  .rkv-chat{flex:1;overflow:auto;padding:10px 12px;background:#fff}
+  .rkv-msg{display:flex;gap:8px;margin:6px 0}
+  .rkv-msg.user{justify-content:flex-end}
+  .rkv-msg .bubble{max-width:80%;padding:10px;border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+  .rkv-msg.user .bubble{background:#0f172a;color:#fff}
+  .rkv-msg.assistant .bubble{background:#f8fafc;border:1px solid #e5e7eb}
+  .rkv-sources{margin-top:6px;padding-top:6px;border-top:1px solid #e2e8f0}
+  .rkv-sources-title{font-size:10px;letter-spacing:.04em;color:#64748b;text-transform:uppercase;margin-bottom:4px}
+  .rkv-composer{border-top:1px solid #e5e7eb;padding:8px;background:#fff}
+  .rkv-composer .row{display:flex;gap:8px}
+  .rkv-composer textarea{flex:1;border:1px solid #e5e7eb;border-radius:999px;padding:10px 12px;resize:none;height:42px}
+  .rkv-composer button{width:56px;border-radius:999px;border:0;background:#0f172a;color:#fff;font-size:18px;cursor:pointer}
+  .rkv-foot{font-size:11px;color:#64748b;text-align:center;margin-top:6px}
+  .rkv-config{position:fixed;left:16px;bottom:16px;background:#0f172a;color:#fff;font-size:12px;padding:6px 10px;border-radius:999px;opacity:.9;z-index:2147483000}
+  .rkv-config input{width:260px;border:0;border-radius:8px;padding:6px 8px;margin-left:6px}
+</style>
+
+<!-- Din egen Hej-UI -->
+<button class="rkv-launcher" id="rkvLauncher" title="Åbn chat">💬</button>
+<div class="rkv-panel" id="rkvPanel">
+  <div class="rkv-topbar">
+    <span class="rkv-brand">RKV</span><span>Hej-chat</span>
+    <button id="rkvClose" title="Luk" style="margin-left:auto;background:transparent;border:0;color:#fff;font-size:18px;cursor:pointer">✕</button>
+  </div>
+  <div class="rkv-hero">
+    <div><span class="logo">🙂</span><strong>Hej RKV 2025</strong></div>
+    <div style="color:#475569;font-size:14px;margin-top:4px">
+      Stil spørgsmål om RKV’s journalistik. Svarene kommer fra din backend (eller demo, hvis ingen URL).
+    </div>
+    <div class="rkv-suggest" id="rkvSuggest"></div>
+  </div>
+  <div class="rkv-chat" id="rkvChat"></div>
+  <div class="rkv-composer">
+    <div class="row">
+      <textarea id="rkvInput" placeholder="Skriv dit spørgsmål her"></textarea>
+      <button id="rkvSend" title="Send">➤</button>
+    </div>
+    <div class="rkv-foot">Tip: tryk Enter for at sende</div>
+  </div>
+</div>
+
+<!-- Lille config til at sætte din backend-URL uden at ændre koden -->
+<div class="rkv-config">API:
+  <input id="rkvApiUrl" placeholder="https://din-backend.dk/api/ask" />
+</div>
+
+<script>
+  // --- Skjul OpenWidget launcher robust (forsøg 2: fallback via observer) ---
+  (function(){
+    const hide = () => {
+      document.querySelectorAll(
+        ".openwidget-widget-launcher, #openwidget-launcher, [data-openwidget-launcher]"
+      ).forEach(el => { el.style.display = "none"; el.style.visibility = "hidden"; el.style.opacity = "0"; });
+    };
+    hide();
+    const mo = new MutationObserver(hide);
+    mo.observe(document.documentElement, { childList: true, subtree: true });
+  })();
+
+  // --- Hej UI elementer ---
+  const panel = document.getElementById('rkvPanel');
+  const launcher = document.getElementById('rkvLauncher');
+  const closeBtn = document.getElementById('rkvClose');
+  const chatEl = document.getElementById('rkvChat');
+  const inputEl = document.getElementById('rkvInput');
+  const sendBtn = document.getElementById('rkvSend');
+  const suggestEl = document.getElementById('rkvSuggest');
+  const apiUrlEl = document.getElementById('rkvApiUrl');
+
+  launcher.onclick = () => panel.classList.add('open');
+  closeBtn.onclick = () => panel.classList.remove('open');
+
+  const DEFAULT_SUGGESTED = [
+    { t: "Hvordan stemmer jeg til valget?", e: "🗳️" },
+    { t: "Hvad er status på kommunens budget?", e: "🏛️" },
+    { t: "Hvad betyder ændringerne i dagpengene?", e: "💬" }
+  ];
+  DEFAULT_SUGGESTED.forEach(s => {
+    const b = document.createElement('button');
+    b.innerHTML = `<span style="margin-right:6px">${s.e}</span>${s.t}`;
+    b.onclick = () => ask(s.t);
+    suggestEl.appendChild(b);
+  });
+
+  // Session-id til evt. logging i backend
+  const SESSION_KEY = "rkv_session_id";
+  let SESSION_ID = localStorage.getItem(SESSION_KEY);
+  if (!SESSION_ID) { SESSION_ID = crypto.randomUUID(); localStorage.setItem(SESSION_KEY, SESSION_ID); }
+
+  // API URL (gemmes i localStorage)
+  let API_URL = localStorage.getItem('rkv_api_url') || "";
+  apiUrlEl.value = API_URL;
+  apiUrlEl.onchange = () => {
+    API_URL = apiUrlEl.value.trim();
+    if (API_URL) localStorage.setItem('rkv_api_url', API_URL);
+    else localStorage.removeItem('rkv_api_url');
+  };
+
+  function sanitize(q){ return (q||"").replace(/\s+/g," ").trim(); }
+  function addMessage(role, text, sources){
+    const wrap = document.createElement('div');
+    wrap.className = 'rkv-msg ' + (role === 'user' ? 'user' : 'assistant');
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.textContent = text;
+    wrap.appendChild(bubble);
+
+    if (sources?.length){
+      const sct = document.createElement('div'); sct.className='rkv-sources';
+      const ttl = document.createElement('div'); ttl.className='rkv-sources-title'; ttl.textContent='Kilder';
+      sct.appendChild(ttl);
+      const ul = document.createElement('ul');
+      sources.forEach(s=>{
+        const li=document.createElement('li');
+        li.innerHTML = `<div style="font-weight:600;font-size:12px">${s.title||"Kilde"}</div>
+                        ${s.snippet?`<div style="color:#64748b;font-size:12px">${s.snippet}</div>`:''}
+                        ${s.url?`<a style="font-size:12px" target="_blank" rel="noreferrer" href="${s.url}">${s.url}</a>`:''}`;
+        ul.appendChild(li);
+      });
+      sct.appendChild(ul);
+      bubble.appendChild(sct);
+    }
+
+    chatEl.appendChild(wrap);
+    chatEl.scrollTop = chatEl.scrollHeight;
+  }
+
+  async function ask(q){
+    const query = sanitize(q || inputEl.value);
+    if (!query) return;
+    addMessage('user', query);
+    inputEl.value = '';
+
+    try{
+      if (!API_URL){
+        // Demo-mode: svar uden backend
+        await new Promise(r=>setTimeout(r,400));
+        addMessage('assistant', `(Demo) Du spurgte: "${query}". Sæt din API-URL nederst til venstre for rigtige svar.`, [
+          { title:"Demo-kilde", url:"https://example.com", snippet:"Dette er en demo." }
+        ]);
+        return;
+      }
+
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json', 'X-Client-Session': SESSION_ID },
+        body: JSON.stringify({ query, topK: 5, model: 'gpt-4o' })
+      });
+      if (!res.ok) throw new Error('API-fejl: ' + res.status);
+      const data = await res.json();
+      addMessage('assistant', data.answer || '(Tomt svar)', data.sources || []);
+    }catch(e){
+      addMessage('assistant', 'Der skete en fejl: ' + (e?.message||e));
+    }
+  }
+
+  sendBtn.onclick = ()=>ask();
+  inputEl.addEventListener('keydown', (e)=>{
+    if (e.key === 'Enter' && !e.shiftKey){
+      e.preventDefault();
+      ask();
+    }
+  });
+</script>
